@@ -1,29 +1,37 @@
 <?php
 
-class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
-{
-    private $inquiryResultMapper;
+namespace App\Test\Paysera\WalletApi\Mappers;
 
-    public function setUp()
+use Paysera\WalletApi\Entity\Inquiry\InquiryItem;
+use Paysera\WalletApi\Mapper\IdentityMapper;
+use Paysera\WalletApi\Mapper\InquiryResultMapper;
+use Paysera\WalletApi\Mapper\PlainValueMapper;
+use PHPUnit\Framework\TestCase;
+
+class InquiryResultMapperTest extends TestCase
+{
+    private InquiryResultMapper $inquiryResultMapper;
+
+    protected function setUp(): void
     {
-        $this->inquiryResultMapper = new \Paysera_WalletApi_Mapper_InquiryResultMapper(array(
-            Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_USER_IDENTITY =>
-                new Paysera_WalletApi_Mapper_IdentityMapper(),
-            Paysera_WalletApi_Entity_Inquiry_InquiryItem::TYPE_PERSON_CODE =>
-                new Paysera_WalletApi_Mapper_PlainValueMapper()
-        ));
+        $this->inquiryResultMapper = new InquiryResultMapper([
+            InquiryItem::TYPE_USER_IDENTITY =>
+                new IdentityMapper(),
+            InquiryItem::TYPE_PERSON_CODE =>
+                new PlainValueMapper(),
+        ]);
     }
 
     public function testInquiryResultValueWithoutIdentity()
     {
         $inquiryValue = 9999999;
-        
-        $data = array(
+
+        $data = [
             'inquiry_identifier' => 'identifier',
             'item_identifier' => 'item identifier',
             'item_type' => 'person_code',
             'value' => $inquiryValue,
-        );
+        ];
 
         $result = $this->inquiryResultMapper->mapToEntity($data);
 
@@ -35,19 +43,19 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testInquiryResultValueWithIdentity()
     {
-        $inquiryValue = array(
+        $inquiryValue = [
             'name' => 'Name',
             'surname' => 'Surname',
             'nationality' => 'LT',
-            'code' => 606060
-        );
+            'code' => 606060,
+        ];
 
-        $data = array(
+        $data = [
             'inquiry_identifier' => 'identifier',
             'item_identifier' => 'item identifier',
             'item_type' => 'user_identity',
             'value' => $inquiryValue,
-        );
+        ];
 
         $result = $this->inquiryResultMapper->mapToEntity($data);
 
@@ -56,11 +64,10 @@ class InquiryResultMapperTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($result->getValue());
 
         $identity = $result->getValue();
-        $this->assertInstanceOf('\Paysera_WalletApi_Entity_User_Identity', $identity);
+        $this->assertInstanceOf('\Paysera\WalletApi\Entity\User\Identity', $identity);
         $this->assertSame($identity->getName(), $inquiryValue['name']);
         $this->assertSame($identity->getSurname(), $inquiryValue['surname']);
         $this->assertSame($identity->getNationality(), $inquiryValue['nationality']);
         $this->assertSame($identity->getCode(), $inquiryValue['code']);
-
     }
 }

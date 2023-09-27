@@ -1,63 +1,71 @@
 <?php
 
-class Paysera_WalletApi_Listener_AppendHeadersListenerTest extends PHPUnit_Framework_TestCase
+namespace App\Test\Paysera\WalletApi\Listener;
+
+use Paysera\WalletApi\Auth\Mac;
+use Paysera\WalletApi\Container;
+use Paysera\WalletApi\Event\RequestEvent;
+use Paysera\WalletApi\EventDispatcher\EventDispatcher;
+use Paysera\WalletApi\Events;
+use Paysera\WalletApi\Http\Request;
+use Paysera\WalletApi\Listener\RequestSigner;
+use PHPUnit\Framework\TestCase;
+
+class AppendHeadersListenerTest extends TestCase
 {
-    public function testHeadersIsDefined()
+    public function testHeadersIsDefined(): void
     {
         $eventDispatcher = $this->getEventDispatcher(
-            array(
-                'headers' => array(
+            [
+                'headers' => [
                     'Header-Name' => 'value',
                     'Header-Another-Name' => 'value',
-                )
-            )
+                ],
+            ],
         );
 
-        $request = new Paysera_WalletApi_Http_Request(
-            'https://test.dev/rest/v1/wallet/me/balance'
+        $request = new Request(
+            'https://test.dev/rest/v1/wallet/me/balance',
         );
 
-        $event = new Paysera_WalletApi_Event_RequestEvent($request, array());
-        $eventDispatcher->dispatch(Paysera_WalletApi_Events::BEFORE_REQUEST, $event);
+        $event = new RequestEvent($request, []);
+        $eventDispatcher->dispatch(Events::BEFORE_REQUEST, $event);
 
         $this->assertEquals(
             'value',
-            $request->getHeaderBag()->getHeader('Header-Name')
+            $request->getHeaderBag()->getHeader('Header-Name'),
         );
 
         $this->assertEquals(
             'value',
-            $request->getHeaderBag()->getHeader('Header-Another-Name')
+            $request->getHeaderBag()->getHeader('Header-Another-Name'),
         );
     }
 
-    public function testHeadersIsNotDefined()
+    public function testHeadersIsNotDefined(): void
     {
-        $eventDispatcher = $this->getEventDispatcher(array('random' => 'rand'));
+        $eventDispatcher = $this->getEventDispatcher(['random' => 'rand']);
 
-        $request = new Paysera_WalletApi_Http_Request(
-            'https://test.dev/rest/v1/wallet/me/balance'
+        $request = new Request(
+            'https://test.dev/rest/v1/wallet/me/balance',
         );
 
-        $event = new Paysera_WalletApi_Event_RequestEvent($request, array());
-        $eventDispatcher->dispatch(Paysera_WalletApi_Events::BEFORE_REQUEST, $event);
+        $event = new RequestEvent($request, []);
+        $eventDispatcher->dispatch(Events::BEFORE_REQUEST, $event);
 
         $this->assertNull($request->getHeaderBag()->getHeader('random'));
     }
 
-    private function getEventDispatcher(array $parameters = array())
+    private function getEventDispatcher(array $parameters = []): EventDispatcher
     {
-        $requestSigner = new Paysera_WalletApi_Listener_RequestSigner(
-            new Paysera_WalletApi_Auth_Mac('123', '555')
+        $requestSigner = new RequestSigner(
+            new Mac('123', '555'),
         );
 
-        $dispatcher = new Paysera_WalletApi_Container();
-        $eventDispatcher = $dispatcher->createDispatcherForClient(
+        return (new Container())->createDispatcherForClient(
             'https://test.dev/',
             $requestSigner,
-            $parameters
+            $parameters,
         );
-
-        return $eventDispatcher;
     }
 }

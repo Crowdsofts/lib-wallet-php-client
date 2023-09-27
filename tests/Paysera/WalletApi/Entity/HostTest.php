@@ -1,23 +1,17 @@
 <?php
 
+namespace App\Test\Paysera\WalletApi\Entity;
 
-class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
+use Paysera\WalletApi\Entity\Client\Host;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
+class HostTest extends TestCase
 {
-
-    /**
-     * @dataProvider buildRegexpDataProvider
-     * @param integer $expected
-     * @param string $uri
-     * @param string $hostname
-     * @param string $path
-     * @param integer $port
-     * @param string $protocol
-     * @param boolean $anyPort
-     * @param boolean $anySubdomain
-     */
-    public function testBuildRegexp($expected, $uri, $hostname, $path, $port, $protocol, $anyPort, $anySubdomain)
+    #[DataProvider('buildRegexpDataProvider')]
+    public function testBuildRegexp(int $expected, string $uri, ?string $hostname, ?string $path, ?int $port, string $protocol, bool $anyPort, bool $anySubdomain): void
     {
-        $host = new Paysera_WalletApi_Entity_Client_Host();
+        $host = new Host();
         $host->setHost($hostname);
         $host->setPath($path);
         $host->setPort($port);
@@ -31,10 +25,10 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expected, preg_match($host->buildRegexp(), $uri));
     }
 
-    public function buildRegexpDataProvider()
+    public static function buildRegexpDataProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 1,
                 'https://www.example.com/path/abc?hello',
                 'example.com',
@@ -42,9 +36,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 true,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 0,
                 'https://www.example.com/path-other/abc?hello',
                 'example.com',
@@ -52,9 +46,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 true,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 1,
                 'https://www.example.com/path',
                 'example.com',
@@ -62,9 +56,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 true,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 1,
                 'mobile.protocol://',
                 null,
@@ -72,9 +66,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'mobile.protocol',
                 true,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 1,
                 'mobile.protocol://path/abc',
                 null,
@@ -82,9 +76,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'mobile.protocol',
                 true,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 0,
                 'mobile.protocol://other-path',
                 null,
@@ -92,9 +86,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'mobile.protocol',
                 true,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 0,
                 'https://www.example.com/path-other/abc?hello',
                 'example.com',
@@ -102,9 +96,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 true,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 1,
                 'https://www.example.com/path',
                 'www.example.com',
@@ -112,9 +106,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 false,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 0,
                 'https://www.example.com:1010/path',
                 'www.example.com',
@@ -122,9 +116,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 false,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 0,
                 'https://a.www.example.com/path',
                 'www.example.com',
@@ -132,9 +126,9 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'https',
                 false,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 1,
                 'mobile.protocol://?someparam=1&status=error',
                 '',
@@ -142,8 +136,8 @@ class Paysera_WalletApi_Entity_HostTest extends PHPUnit_Framework_TestCase
                 null,
                 'mobile.protocol',
                 true,
-                true
-            ),
-        );
+                true,
+            ],
+        ];
     }
 }

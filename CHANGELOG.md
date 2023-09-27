@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 2.4.2
 ### Added
-- Added `Paysera_WalletApi_Client_WalletClient::getUserConfirmedPhoneNumbers`
-- Added `Paysera_WalletApi_Client_TokenRelatedWalletClient::getUserConfirmedPhoneNumbers`
+- Added `\Paysera\WalletApi\Client\WalletClient::getUserConfirmedPhoneNumbers`
+- Added `\Paysera\WalletApi\Client\TokenRelatedWalletClient::getUserConfirmedPhoneNumbers`
 
 ## Removed
 - Removed composer.json Authors
@@ -36,31 +36,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed decoding to use decimals instead of cents
 
 ## 2.1.0
-- Added `\Paysera_WalletApi_Mapper::decodeWalletBalance` mapping from decimal
+- Added `\Paysera\WalletApi\Mapper::decodeWalletBalance` mapping from decimal
 
 ## 2.0.0
 - Changed `checkSignWithPublicKey` sign validation algorithm
 
 ## 1.26.0
-- Added `Paysera_WalletApi_Listener_AppendHeadersListener` listener.
-- Added `Paysera_WalletApi_OAuth_Consumer::SCOPE_RECENT_STATEMENTS` scope.
+- Added `\Paysera\WalletApi\Listener\AppendHeadersListener` listener.
+- Added `\Paysera\WalletApi\OAuth\Consumer::SCOPE_RECENT_STATEMENTS` scope.
 
 ## 1.25.1
 - Fixed a bug where code assumed if location doesn't have any opened hours is opened at all times.
 
 
 ## 1.25.0
-- Added `Paysera_WalletApi_Client_WalletClient::getTransfers` endpoint.
+- Added `\Paysera\WalletApi\Client\WalletClient::getTransfers` endpoint.
 
 ## 1.24.1
-- Added `Paysera_WalletApi_OAuth_Consumer::SCOPE_CHECK_HAS_SUFFICIENT_BALANCE` scope. Required for checking if balance amount is sufficient.
+- Added `\Paysera\WalletApi\OAuth\Consumer::SCOPE_CHECK_HAS_SUFFICIENT_BALANCE` scope. Required for checking if balance amount is sufficient.
 
 ## 1.24.0
 ### Changed
-- `Paysera_WalletApi_OAuth_Consumer::getTransferSignRedirectUri` also requires redirect uri as second argument, adds it's value as redirect_uri query parameter.
+- `\Paysera\WalletApi\OAuth\Consumer::getTransferSignRedirectUri` also requires redirect uri as second argument, adds it's value as redirect_uri query parameter.
 
 ## 1.23.0
-- Added `getTransferSignRedirectUri` to `Paysera_WalletApi_OAuth_Consumer`
+- Added `getTransferSignRedirectUri` to `\Paysera\WalletApi\OAuth\Consumer`
 
 ## 1.22.1
 ### Changed
@@ -76,4 +76,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.21.1
 ### Deprecated
-- Deprecated `Paysera_WalletApi_OAuth_Consumer::getResetPasswordUri` and `Paysera_WalletApi_Util_Router::getRemindPasswordUri` methods
+- Deprecated `\Paysera\WalletApi\OAuth\Consumer::getResetPasswordUri` and `\Paysera\WalletApi\Util\Router::getRemindPasswordUri` methods

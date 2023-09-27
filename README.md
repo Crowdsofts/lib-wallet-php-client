@@ -8,23 +8,22 @@ OAuth example
 <?php
 
 // setup autoloader for Paysera Wallet API library
-require_once '../../lib-wallet-php-client/src/Paysera/WalletApi/Autoloader.php';
-Paysera_WalletApi_Autoloader::register();
+require_once 'vendor/autoload.php';
 
 // credentials for API
 $clientId = 'CLIENT_ID';
 // $secret - shared secret to use in MAC auth
 $secret = 'SECRET';
 // or information about certificate to use in SSL auth
-//$secret = Paysera_WalletApi_Http_ClientCertificate::create()
+//$secret = \Paysera\WalletApi\Http\ClientCertificate::create()
 //    ->setCertificatePath('/path/to/cert.crt')
 //    ->setPrivateKeyPath('/path/to/private.key');
 
 // create main object to use for all functionality
-$api = new Paysera_WalletApi($clientId, $secret);
+$api = new \Paysera\WalletApi($clientId, $secret);
 
 // for sandbox environment, use the following code instead:
-// $api = new Paysera_WalletApi($clientId, $secret, Paysera_WalletApi_Util_Router::createForSandbox());
+// $api = new \Paysera\WalletApi($clientId, $secret, \Paysera\WalletApi\Util\Router::createForSandbox());
 
 // get service, responsible for OAuth code grant type integration
 $oauth = $api->oauthConsumer();
@@ -37,10 +36,10 @@ try {
         if ($token === null) {                  // no code parameter - redirect user to authentication endpoint
             $redirectUri = null;                // URL of this file; it's optional parameter
             header('Location: ' . $oauth->getAuthorizationUri(array(            // scopes are optional, no scope allows to get user ID/wallet ID
-                Paysera_WalletApi_OAuth_Consumer::SCOPE_EMAIL,                  // to get user's main email address
-                // Paysera_WalletApi_OAuth_Consumer::SCOPE_IDENTITY,            // this scope allows to get personal code, name and surname
-                // Paysera_WalletApi_OAuth_Consumer::SCOPE_FULL_NAME,           // use this scope if only name and surname is needed
-                // Paysera_WalletApi_OAuth_Consumer::SCOPE_IDENTITY_OFFLINE,    // this allows to get identity by user ID, after token has expired, using API, not related to token
+                \Paysera\WalletApi\OAuth\Consumer::SCOPE_EMAIL,                  // to get user's main email address
+                // \Paysera\WalletApi\OAuth\Consumer::SCOPE_IDENTITY,            // this scope allows to get personal code, name and surname
+                // \Paysera\WalletApi\OAuth\Consumer::SCOPE_FULL_NAME,           // use this scope if only name and surname is needed
+                // \Paysera\WalletApi\OAuth\Consumer::SCOPE_IDENTITY_OFFLINE,    // this allows to get identity by user ID, after token has expired, using API, not related to token
             ), $redirectUri));
         } else {
             $_SESSION['token'] = $token;
