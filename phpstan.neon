@@ -1,0 +1,10 @@
+includes:
+    - phpstan-baseline.neon
+#    - phpstan-shipmonk.neon
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    level: 8
+    tmpDir: .phpstan.cache
+    paths:
+        - src
+    checkGenericClassInNonGenericObjectType: false

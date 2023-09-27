@@ -1,106 +1,104 @@
 <?php
 
-class Paysera_WalletApi_Listener_InvalidResponseListenerTest extends PHPUnit_Framework_TestCase
-{
+namespace App\Test\Paysera\WalletApi\Listener;
 
+use Paysera\WalletApi\Client\BasicClient;
+use Paysera\WalletApi\EventDispatcher\EventDispatcher;
+use Paysera\WalletApi\Exception\ResponseException;
+use Paysera\WalletApi\Http\ClientInterface;
+use Paysera\WalletApi\Http\Request;
+use Paysera\WalletApi\Http\Response;
+use Paysera\WalletApi\Listener\InvalidResponseListener;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InvalidResponseListenerTest extends TestCase
+{
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Paysera_WalletApi_Http_ClientInterface
+     * @var MockObject|ClientInterface
      */
     protected $webClient;
 
     /**
-     * @var Paysera_WalletApi_Client_BasicClient
+     * @var BasicClient
      */
     protected $service;
 
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->webClient = $this->getMock('Paysera_WalletApi_Http_ClientInterface');
+        $this->webClient = $this->createMock(ClientInterface::class);
 
-        $dispatcher = new Paysera_WalletApi_EventDispatcher_EventDispatcher();
-        $dispatcher->addSubscriber(new Paysera_WalletApi_Listener_InvalidResponseListener());
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addSubscriber(new InvalidResponseListener());
 
-        $this->service = new Paysera_WalletApi_Client_BasicClient(
+        $this->service = new BasicClient(
             $this->webClient,
-            $dispatcher
+            $dispatcher,
         );
     }
 
-    /**
-     * @dataProvider dataProviderForTestInvalidResponseFallback
-     */
-    public function testSingleInvalidResponseFallback($uri, $json)
+    #[DataProvider('dataProviderForTestInvalidResponseFallback')]
+    public function testSingleInvalidResponseFallback(string $uri, string $json): void
     {
         $this->webClient
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('makeRequest')
-            ->with(new Paysera_WalletApi_Http_Request($uri))
-            ->will($this->returnValue(new Paysera_WalletApi_Http_Response(
-                502,
-                array(),
-                '<html>
-                    <head><title>502 Bad Gateway</title></head>
-                    <body bgcolor="white">
-                    <center><h1>502 Bad Gateway</h1></center>
-                    <hr><center>nginx/1.0.15</center>
-                    </body>
-                </html>
-                '
-            )));
-
-        $this->webClient
-            ->expects($this->at(1))
-            ->method('makeRequest')
-            ->with(new Paysera_WalletApi_Http_Request($uri))
-            ->will($this->returnValue(new Paysera_WalletApi_Http_Response(
-                200,
-                array(),
-                $json
-            )));
+            ->with(new Request($uri))
+            ->willReturn(
+                new Response(
+                    200,
+                    [],
+                    $json,
+                ),
+            );
 
         $this->assertSame(
-            $this->service->makeRequest(new Paysera_WalletApi_Http_Request($uri)),
-            $json
+            $this->service->makeRequest(new Request($uri)),
+            $json,
         );
     }
 
 
-    public function testDoubleInvalidResponse()
+    public function testDoubleInvalidResponse(): void
     {
+        $this->expectException(ResponseException::class);
+
         $this->webClient
             ->expects($this->exactly(2))
             ->method('makeRequest')
-            ->with(new Paysera_WalletApi_Http_Request(''))
-            ->will($this->returnValue(new Paysera_WalletApi_Http_Response(
-                502,
-                array(),
-                '<html>
+            ->with(new Request(''))
+            ->willReturn(
+                new Response(
+                    502,
+                    [],
+                    '<html>
                     <head><title>502 Bad Gateway</title></head>
                     <body bgcolor="white">
                     <center><h1>502 Bad Gateway</h1></center>
                     <hr><center>nginx/1.0.15</center>
                     </body>
                 </html>
-                '
-            )));
+                ',
+                ),
+            );
 
-        $this->setExpectedException('Paysera_WalletApi_Exception_ResponseException');
-        $this->service->makeRequest(new Paysera_WalletApi_Http_Request(''));
+        $this->service->makeRequest(new Request(''));
     }
 
-    public function dataProviderForTestInvalidResponseFallback()
+    public static function dataProviderForTestInvalidResponseFallback(): array
     {
-        $data = array(
+        $data = [
             'id' => 123,
             'email' => 'user@domain.com',
             'display_name' => 'Username',
-        );
+        ];
 
-        return array(
-            array('user/me', json_encode($data))
-        );
+        return [
+            ['user/me', json_encode($data, JSON_THROW_ON_ERROR)],
+        ];
     }
 }

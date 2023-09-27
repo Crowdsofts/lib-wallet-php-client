@@ -1,0 +1,68 @@
+parameters:
+    shipmonkRules:
+        forbidCheckedExceptionInCallable:
+            enabled: false
+        enforceEnumMatch:
+            enabled: true
+        forbidCustomFunctions:
+            enabled: true
+            list:
+                var_dump: 'Please remove debug code'
+                dump: 'Please remove debug code'
+                dd: 'Please remove debug code'
+                die: 'Please dont just die'
+                exit: 'Please dont just exit'
+        forbidUnusedException:
+            enabled: false
+        forbidIdenticalClassComparison:
+            enabled: false
+            blacklist: ['DateTimeInterface']
+        requirePreviousExceptionPass:
+            enabled: false
+            reportEvenIfExceptionIsNotAcceptableByRethrownOne: false
+        uselessPrivatePropertyDefaultValue:
+            enabled: true
+        uselessPrivatePropertyNullability:
+            enabled: true
+        allowComparingOnlyComparableTypes:
+            enabled: false
+        allowNamedArgumentOnlyInAttributes:
+            enabled: false
+        backedEnumGenerics:
+            enabled: false
+        classSuffixNaming:
+            enabled: false
+        enforceListReturn:
+            enabled: false
+        enforceNativeReturnTypehint:
+            enabled: false
+        enforceReadonlyPublicProperty:
+            enabled: false
+        forbidAssignmentNotMatchingVarDoc:
+            enabled: false
+        forbidCast:
+            enabled: false
+        forbidEnumInFunctionArguments:
+            enabled: false
+        forbidFetchOnMixed:
+            enabled: false
+        forbidMatchDefaultArmForEnums:
+            enabled: false
+        forbidMethodCallOnMixed:
+            enabled: false
+        forbidNullInAssignOperations:
+            enabled: false
+        forbidNullInBinaryOperations:
+            enabled: false
+        forbidNullInInterpolatedString:
+            enabled: false
+        forbidPhpDocNullabilityMismatchWithNativeTypehint:
+            enabled: false
+        forbidVariableTypeOverwriting:
+            enabled: false
+        forbidUnsetClassField:
+            enabled: false
+        forbidUselessNullableReturn:
+            enabled: false
+        forbidUnusedMatchResult:
+            enabled: false
