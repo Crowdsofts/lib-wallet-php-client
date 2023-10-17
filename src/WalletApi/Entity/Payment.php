@@ -269,7 +269,7 @@ class Payment
     /**
      * Gets createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -477,7 +477,7 @@ class Payment
     /**
      * Gets confirmedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getConfirmedAt()
     {
@@ -513,7 +513,7 @@ class Payment
     /**
      * Gets freezeUntil
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getFreezeUntil()
     {

@@ -179,7 +179,7 @@ class Transaction
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -374,7 +374,7 @@ class Transaction
     /**
      * Get confirmedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getConfirmedAt()
     {
@@ -755,7 +755,7 @@ class Transaction
     /**
      * Gets reserveUntil
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getReserveUntil()
     {

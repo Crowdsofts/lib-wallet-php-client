@@ -144,7 +144,7 @@ class Allowance
     /**
      * Gets validUntil
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getValidUntil()
     {
@@ -154,7 +154,7 @@ class Allowance
     /**
      * Gets confirmedAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getConfirmedAt()
     {
@@ -283,7 +283,7 @@ class Allowance
     /**
      * Gets createdAt
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

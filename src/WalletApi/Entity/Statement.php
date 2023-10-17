@@ -95,7 +95,7 @@ class Statement
     /**
      * Gets date
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getDate()
     {

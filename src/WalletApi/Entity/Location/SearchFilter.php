@@ -165,7 +165,7 @@ class SearchFilter extends \Paysera\WalletApi\Entity\Search\Filter
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getUpdatedAfter()
     {

@@ -95,7 +95,7 @@ class SearchFilter extends Filter
     /**
      * Gets fromDate
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getFromDate()
     {
@@ -119,7 +119,7 @@ class SearchFilter extends Filter
     /**
      * Gets toDate
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getToDate()
     {
