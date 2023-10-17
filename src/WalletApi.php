@@ -144,7 +144,7 @@ class WalletApi
      * Returns router, related to API. Can be used to get transaction confirmation URI
      *
      */
-    public function router(): ?Router
+    public function router(): Router
     {
         return $this->getRouter();
     }
